@@ -1,6 +1,13 @@
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
+
+from .models import Pattern
 
 
 def index(request):
-    return HttpResponse("List of juggling patterns!")
+    pattern_list = Pattern.objects.all()
+    return render(request, 'patterns/index.html', {'pattern_list': pattern_list})
+
+
+def detail(request, pattern_id):
+    pattern = get_object_or_404(Pattern, pk=pattern_id)
+    return render(request, 'patterns/detail.html', {'pattern': pattern})
