@@ -47,8 +47,8 @@ class Pattern(models.Model):
     # Date, number of catches
 
     def __str__(self):
-        s = self.siteswap
-        s += " " + self.prop_type
+        s = self.prop_type
+        s += " " + self.siteswap
         for m in self.modifiers:
             s += " " + m
         for b in self.body_throw:
@@ -57,7 +57,7 @@ class Pattern(models.Model):
 
 
 class Difficulties(models.Model):
-    pattern = models.ForeignKey(Pattern, on_delete=models.CASCADE)
+    pattern = models.OneToOneField(Pattern, on_delete=models.CASCADE)
     n_objects = models.PositiveIntegerField(default=20)
     max_height_minus_min_height = models.IntegerField(default=20)
     body_throw_difficulty = models.IntegerField(default=100)

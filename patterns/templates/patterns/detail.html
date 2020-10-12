@@ -28,22 +28,22 @@
     <table>
         <tr>
             <td>Number of objects</td>
-            <td>: {{ pattern.difficulties_set.all.0.n_objects }}</td>
+            <td>: {{ pattern.difficulties.n_objects }}</td>
         </tr>
         <tr>
             <td>Max height throw - min height throw</td>
-            <td>: {{ pattern.difficulties_set.all.0.max_height_minus_min_height }}</td>
+            <td>: {{ pattern.difficulties.max_height_minus_min_height }}</td>
         </tr>
         <tr>
             <td>Body throw difficulty</td>
-            <td>: {{ pattern.difficulties_set.all.0.body_throw_difficulty }}</td>
+            <td>: {{ pattern.difficulties.body_throw_difficulty }}</td>
         </tr>
     </table>
     <h1>Choose your difficulty</h1>
     <h1>Patterns of a similar difficulty</h1>
     <a href="">Pick me a pattern!</a>
     {% for similar_pattern in pattern_list %}
-        {% if similar_pattern.difficulties_set.all.0.n_objects == pattern.difficulties_set.all.0.n_objects %}
+        {% if similar_pattern.difficulties.n_objects == pattern.difficulties.n_objects %}
         <br>
         <a href="{% url 'patterns:detail' similar_pattern.id %}">{{ similar_pattern }}</a>
         {% endif %}
