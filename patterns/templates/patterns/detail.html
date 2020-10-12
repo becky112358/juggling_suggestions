@@ -2,12 +2,46 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Juggling Idea Generator: Patterns similar to {{ pattern.siteswap }}</title>
+    <style>
+    .column {
+        float: left;
+    }
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+    </style>
 </head>
 <body>
-    <h1>{{ pattern }}</h1>
-    <ul>
-        {{ pattern.difficulties_set.all }}
-    </ul>
+    <h1>Pattern</h1>
+    <div class="row">
+        <div class="column">
+            <p>Siteswap</p>
+            <p>Prop type</p>
+            <p>Body throws</p>
+            <p>Modifiers</p>
+        </div>
+        <div class="column">
+            <p>: {{ pattern.siteswap }}</p>
+            <p>: {{ pattern.prop_type }}</p>
+            <p>: {% for body_throw in pattern.body_throws %}{{ body_throw }}{% endfor %}</p>
+            <p>: {% for modifier in pattern.modifiers %}{{ modifier }}{% endfor %}</p>
+        </div>
+    </div>
+    <h1>Difficulty</h1>
+    <div class="row">
+        <div class="column">
+            <p>Number of objects</p>
+            <p>Max height throw - min height throw</p>
+            <p>Body throw difficulty</p>
+        </div>
+        <div class="column">
+            <p>: {{ pattern.difficulties_set.all.0.n_objects }}</p>
+            <p>: {{ pattern.difficulties_set.all.0.max_height_minus_min_height }}</p>
+            <p>: {{ pattern.difficulties_set.all.0.body_throw_difficulty }}</p>
+        </div>
+    </div>
 </body>
 </html>

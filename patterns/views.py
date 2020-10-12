@@ -1,11 +1,13 @@
 from django.shortcuts import get_object_or_404, render
 
-from .models import Pattern
+from .models import Pattern, PropType
 
 
 def index(request):
     pattern_list = Pattern.objects.all()
-    return render(request, 'patterns/index.html', {'pattern_list': pattern_list})
+    return render(request, 'patterns/index.html',
+                  {'pattern_list': pattern_list,
+                   'PropType': PropType})
 
 
 def detail(request, pattern_id):

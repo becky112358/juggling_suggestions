@@ -2,13 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Juggling Idea Generator</title>
 </head>
 <body>
+    <h1>Patterns Index</h1>
     {% if pattern_list %}
+    <!--TODO Eek! Loop over PropTypes.-->
+        <h2>Balls</h2>
         <ul>
         {% for pattern in pattern_list %}
-            <li><a href="{% url 'patterns:detail' pattern.id %}">{{ pattern }}</a></li>
+            {% if pattern.prop_type == 'balls' %}
+                <li><a href="{% url 'patterns:detail' pattern.id %}">{{ pattern.siteswap }}</a></li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+        <h2>Clubs</h2>
+        <ul>
+        {% for pattern in pattern_list %}
+            {% if pattern.prop_type == 'PropType.CLUBS' %} <!--TODO Ewy ewy different from 'balls'!!-->
+                <li><a href="{% url 'patterns:detail' pattern.id %}">{{ pattern.siteswap }}</a></li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+        <h2>Rings</h2>
+        <ul>
+        {% for pattern in pattern_list %}
+            {% if pattern.prop_type == 'PropType.RINGS' %}
+                <li><a href="{% url 'patterns:detail' pattern.id %}">{{ pattern.siteswap }}</a></li>
+            {% endif %}
         {% endfor %}
         </ul>
     {% else %}
