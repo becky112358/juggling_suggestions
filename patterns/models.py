@@ -4,9 +4,9 @@ from django.db import models
 
 
 class PropType(Enum):
-    BALLS = "balls"
-    CLUBS = "clubs"
-    RINGS = "rings"
+    BALLS = "ball"
+    CLUBS = "club"
+    RINGS = "ring"
 
 
 class Modifier(Enum):
