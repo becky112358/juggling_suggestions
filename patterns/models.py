@@ -10,8 +10,8 @@ class PropType(Enum):
 
 
 class Modifier(Enum):
-    MILLS_MESS = 0
-    WHILE_BALANCING_A_CLUB_ON_THE_FACE = 1
+    MILLS_MESS = "Mills' mess"
+    WHILE_BALANCING_A_CLUB_ON_THE_FACE = "while balancing a club on the face"
 
 
 class BodyThrow(Enum):
@@ -22,9 +22,9 @@ class BodyThrow(Enum):
 
 
 class BodyThrowType(Enum):
-    CATCH = 0
-    THROW = 1
-    CATCH_AND_THROW = 2
+    CATCH = "catch"
+    THROW = "throw"
+    CATCH_AND_THROW = "catch and throw"
 
 
 class Pattern(models.Model):

@@ -19,7 +19,7 @@
         <h2>Clubs</h2>
         <ul>
         {% for pattern in pattern_list %}
-            {% if pattern.prop_type == 'PropType.CLUBS' %} <!--TODO Ewy ewy different from 'balls'!!-->
+            {% if pattern.prop_type == 'clubs' %}
                 <li><a href="{% url 'patterns:detail' pattern.id %}">{{ pattern.siteswap }}</a></li>
             {% endif %}
         {% endfor %}
@@ -27,7 +27,7 @@
         <h2>Rings</h2>
         <ul>
         {% for pattern in pattern_list %}
-            {% if pattern.prop_type == 'PropType.RINGS' %}
+            {% if pattern.prop_type == 'rings' %}
                 <li><a href="{% url 'patterns:detail' pattern.id %}">{{ pattern.siteswap }}</a></li>
             {% endif %}
         {% endfor %}

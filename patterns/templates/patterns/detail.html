@@ -3,45 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <title>Juggling Idea Generator: Patterns similar to {{ pattern.siteswap }}</title>
-    <style>
-    .column {
-        float: left;
-    }
-    .row:after {
-        content: "";
-        display: table;
-        clear: both;
-    }
-    </style>
 </head>
 <body>
     <h1>Pattern</h1>
-    <div class="row">
-        <div class="column">
-            <p>Siteswap</p>
-            <p>Prop type</p>
-            <p>Body throws</p>
-            <p>Modifiers</p>
-        </div>
-        <div class="column">
-            <p>: {{ pattern.siteswap }}</p>
-            <p>: {{ pattern.prop_type }}</p>
-            <p>: {% for body_throw in pattern.body_throws %}{{ body_throw }}{% endfor %}</p>
-            <p>: {% for modifier in pattern.modifiers %}{{ modifier }}{% endfor %}</p>
-        </div>
-    </div>
-    <h1>Difficulty</h1>
-    <div class="row">
-        <div class="column">
-            <p>Number of objects</p>
-            <p>Max height throw - min height throw</p>
-            <p>Body throw difficulty</p>
-        </div>
-        <div class="column">
-            <p>: {{ pattern.difficulties_set.all.0.n_objects }}</p>
-            <p>: {{ pattern.difficulties_set.all.0.max_height_minus_min_height }}</p>
-            <p>: {{ pattern.difficulties_set.all.0.body_throw_difficulty }}</p>
-        </div>
-    </div>
+    <table>
+        <tr>
+            <td>Siteswap</td>
+            <td>: {{ pattern.siteswap }}</td>
+        </tr>
+        <tr>
+            <td>Prop type</td>
+            <td>: {{ pattern.prop_type }}</td>
+        </tr>
+        <tr>
+            <td>Body throws</td>
+            <td>{% for body_throw in pattern.body_throws %}: {{ body_throw }}<br>{% endfor %}</td>
+        </tr>
+        <tr>
+            <td>Modifiers</td>
+            <td>{% for modifier in pattern.modifiers %}: {{ modifier }}<br>{% endfor %}</td>
+        </tr>
+    </table>
+    <h1>Pattern difficulty</h1>
+    <table>
+        <tr>
+            <td>Number of objects</td>
+            <td>: {{ pattern.difficulties_set.all.0.n_objects }}</td>
+        </tr>
+        <tr>
+            <td>Max height throw - min height throw</td>
+            <td>: {{ pattern.difficulties_set.all.0.max_height_minus_min_height }}</td>
+        </tr>
+        <tr>
+            <td>Body throw difficulty</td>
+            <td>: {{ pattern.difficulties_set.all.0.body_throw_difficulty }}</td>
+        </tr>
+    </table>
+    <h1>Choose your difficulty</h1>
+    <h1>Patterns of a similar difficulty</h1>
+    <a href="">Pick me a pattern!</a>
+    {% for similar_pattern in pattern_list %}
+        {% if similar_pattern.difficulties_set.all.0.n_objects == pattern.difficulties_set.all.0.n_objects %}
+        <br>
+        <a href="{% url 'patterns:detail' similar_pattern.id %}">{{ similar_pattern }}</a>
+        {% endif %}
+    {% endfor %}
 </body>
 </html>
