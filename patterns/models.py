@@ -3,17 +3,10 @@ from enum import Enum
 from django.db import models
 
 
-PROP_TYPE_CHOICES = (
-    ('BALL', 'ball'),
-    ('CLUB', 'club'),
-    ('RING', 'ring'),
-)
-
-
-#  class PropType(Enum):
-#      BALLS = "ball"
-#      CLUBS = "club"
-#      RINGS = "ring"
+class PropType(Enum):
+    BALLS = "ball"
+    CLUBS = "club"
+    RINGS = "ring"
 
 
 class Modifier(Enum):
@@ -39,7 +32,7 @@ class Pattern(models.Model):
     siteswap = models.CharField(max_length=200)
     prop_type = models.CharField(
         max_length=5,
-        choices=PROP_TYPE_CHOICES)
+        choices=[(tag.name, tag.value) for tag in PropType])
     modifiers = models.JSONField(
         default=list,
         choices=[(tag, tag.value) for tag in Modifier])
