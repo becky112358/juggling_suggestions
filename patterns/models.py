@@ -3,10 +3,17 @@ from enum import Enum
 from django.db import models
 
 
-class PropType(Enum):
-    BALLS = "ball"
-    CLUBS = "club"
-    RINGS = "ring"
+PROP_TYPE_CHOICES = (
+    ('BALL', 'ball'),
+    ('CLUB', 'club'),
+    ('RING', 'ring'),
+)
+
+
+#  class PropType(Enum):
+#      BALLS = "ball"
+#      CLUBS = "club"
+#      RINGS = "ring"
 
 
 class Modifier(Enum):
@@ -32,7 +39,7 @@ class Pattern(models.Model):
     siteswap = models.CharField(max_length=200)
     prop_type = models.CharField(
         max_length=5,
-        choices=[(tag, tag.value) for tag in PropType])
+        choices=PROP_TYPE_CHOICES)
     modifiers = models.JSONField(
         default=list,
         choices=[(tag, tag.value) for tag in Modifier])
@@ -47,7 +54,7 @@ class Pattern(models.Model):
     # Date, number of catches
 
     def __str__(self):
-        s = str(self.difficulties.n_objects)
+        s = str(self.difficulty.n_objects)
         s += " " + self.prop_type
         s += " " + self.siteswap
         for m in self.modifiers:
@@ -57,11 +64,16 @@ class Pattern(models.Model):
         return s
 
 
-class Difficulties(models.Model):
+class Difficulty(models.Model):
     pattern = models.OneToOneField(Pattern, on_delete=models.CASCADE)
-    n_objects = models.PositiveIntegerField(default=20)
-    max_height_minus_min_height = models.IntegerField(default=20)
+    n_objects = models.PositiveIntegerField(default=20,
+                                            verbose_name="number of objects")
+    max_height_minus_min_height = models.IntegerField(default=20,
+                                                      verbose_name="maximum height - minimum height")
     body_throw_difficulty = models.IntegerField(default=100)
+
+    class Meta:
+        verbose_name_plural = "Difficulty"
 
     def __str__(self):
         return "\n              n objects: " + str(self.n_objects) \

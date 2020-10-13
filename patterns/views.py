@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 
-from .models import Pattern, PropType
+from .models import Pattern
 
 
 def index(request):
