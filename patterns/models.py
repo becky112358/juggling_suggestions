@@ -47,7 +47,8 @@ class Pattern(models.Model):
     # Date, number of catches
 
     def __str__(self):
-        s = self.prop_type
+        s = str(self.difficulties.n_objects)
+        s += " " + self.prop_type
         s += " " + self.siteswap
         for m in self.modifiers:
             s += " " + m
