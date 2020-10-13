@@ -3,12 +3,6 @@ from enum import Enum
 from django.db import models
 
 
-class PropType(Enum):
-    BALLS = "ball"
-    CLUBS = "club"
-    RINGS = "ring"
-
-
 class Modifier(Enum):
     MILLS_MESS = "Mills' mess"
     WHILE_BALANCING_A_CLUB_ON_THE_FACE = "while balancing a club on the face"
@@ -28,19 +22,25 @@ class BodyThrowType(Enum):
 
 
 class Pattern(models.Model):
+
+    class PropType(models.TextChoices):
+        BALL = 'ball'
+        CLUB = 'club'
+        RING = 'ring'
+
     # TODO should be a list of integers of base 62
     siteswap = models.CharField(max_length=200)
     prop_type = models.CharField(
         max_length=5,
-        choices=[(tag.name, tag.value) for tag in PropType])
+        choices=PropType.choices)
     modifiers = models.JSONField(
         default=list,
-        choices=[(tag, tag.value) for tag in Modifier])
+        choices=[(tag.name, tag.value) for tag in Modifier])
     # Body throw should be a list of tuples
     # [(x, behind the back, throw), (y, under the leg, throw)]
     body_throw = models.JSONField(
         default=list,
-        choices=[(tag, tag.value) for tag in BodyThrow])
+        choices=[(tag.name, tag.value) for tag in BodyThrow])
 #  int(base=62),  # TODO should be a selection from siteswap
 #  [(tag, tag.value) for tag in BodyThrowType]))
     # User-unique information:
