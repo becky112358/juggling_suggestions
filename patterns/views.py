@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 
-from .models import Pattern
+from .models import Modifier, Pattern
 
 
 def index(request):
@@ -15,4 +15,5 @@ def detail(request, pattern_id):
     pattern = get_object_or_404(Pattern, pk=pattern_id)
     return render(request, 'patterns/detail.html',
                   {'pattern': pattern,
-                   'pattern_list': pattern_list})
+                   'pattern_list': pattern_list,
+                   'modifier_list': Modifier})

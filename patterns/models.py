@@ -72,11 +72,15 @@ class Modifier(models.Model):
         # TODO eek duplicate code
         s = ""
         if self.mills_mess:
-            s += ", Mills' mess"
+            s += "Mills' mess"
         if self.while_balancing_a_club_on_the_face:
-            s += ", while balancing a club on the face"
+            if s != "":
+                s += ", "
+            s += "while balancing a club on the face"
         if self.while_standing_on_a_rolla_bolla:
-            s += ", while standing on a rolla bolla"
+            if s != "":
+                s += ", "
+            s += "while standing on a rolla bolla"
         return s
 
 

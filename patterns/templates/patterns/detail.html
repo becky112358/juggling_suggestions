@@ -21,7 +21,7 @@
         </tr>
         <tr>
             <td>Modifiers</td>
-            <td>{% for modifier in pattern.modifiers %}: {{ modifier }}<br>{% endfor %}</td>
+            <td>{% if pattern.modifier %}: {{ pattern.modifier }}<br>{% endif %}</td>
         </tr>
     </table>
     <h1>Pattern difficulty</h1>
