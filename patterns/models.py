@@ -22,11 +22,42 @@ class Pattern(models.Model):
         s = str(self.difficulty.n_objects)
         s += " " + self.prop_type
         s += " " + self.siteswap
+        if hasattr(self, 'body_throw'):
+            s += " " + str(self.body_throw)
         if hasattr(self, 'modifier'):
             s += " " + str(self.modifier)
-#        for b in self.body_throw:
-#            s += " " + b
         return s
+
+
+class BodyThrow(models.Model):
+
+    class BodyThrowType(models.TextChoices):
+        BEHIND_THE_BACK = 'behind the back', _('behind the back')
+        BEHIND_THE_NECK = 'behind the neck', _('behind the neck')
+        BEHIND_THE_SHOULDER = 'behind the shoulder', _('behind the shoulder')
+        UNDER_THE_ARM = 'under the arm', _('under the arm')
+        UNDER_THE_LEG = 'under the leg', _('under the leg')
+
+    class BodyCatchOrThrow(models.TextChoices):
+        CATCH = "caught", _('catch')
+        THROW = "thrown", _('throw')
+        CATCH_AND_THROW = "caught and thrown", _('catch and throw')
+
+    pattern = models.ForeignKey(Pattern, on_delete=models.CASCADE)
+    throw_moment = models.CharField(
+        max_length=1
+    )
+    throw_type = models.CharField(
+        max_length=20,
+        choices=BodyThrowType.choices
+    )
+    catch_or_throw = models.CharField(
+        max_length=20,
+        choices=BodyCatchOrThrow.choices
+    )
+
+    def __str__(self):
+        return "with the " + self.throw_moment + " " + self.catch_or_throw + " " + self.throw_type
 
 
 class Modifier(models.Model):
@@ -37,7 +68,7 @@ class Modifier(models.Model):
     while_standing_on_a_rolla_bolla = models.BooleanField()
 
     def __str__(self):
-        # TODO eek so much duplicate code
+        # TODO eek duplicate code
         s = ""
         if self.mills_mess:
             s += ", Mills' mess"
@@ -46,33 +77,6 @@ class Modifier(models.Model):
         if self.while_standing_on_a_rolla_bolla:
             s += ", while standing on a rolla bolla"
         return s
-
-#
-# class BodyThrow(models.Model):
-#
-#     class BodyThrowType(models.TextChoices):
-#         BEHIND_THE_BACK = 'behind the back', _('behind the back')
-#         BEHIND_THE_SHOULDER = 'behind the shoulder', _('behind the shoulder')
-#         UNDER_THE_ARM = 'under the arm', _('under the arm')
-#         UNDER_THE_LEG = 'under the leg', _('under the leg')
-#
-#     class BodyThrowMoment(models.TextChoices):
-#         CATCH = "catch", _('catch')
-#         THROW = "throw", _('throw')
-#         CATCH_AND_THROW = "catch and throw", _('catch and throw')
-#
-#     pattern = models.ForeignKey(Pattern, on_delete=models.CASCADE)
-#     throw_number = models.CharField(
-#         max_length=1
-#     )
-#     throw_type = models.CharField(
-#         max_length=20,
-#         choices=BodyThrowType.choices
-#     )
-#     throw_moment = models.CharField(
-#         max_length=15,
-#         choices=BodyThrowMoment.choices
-#     )
 
 
 class Difficulty(models.Model):

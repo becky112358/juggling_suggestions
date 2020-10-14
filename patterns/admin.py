@@ -1,14 +1,13 @@
 from django.contrib import admin
 
-from .models import Difficulty, Modifier, Pattern
+from .models import BodyThrow, Difficulty, Modifier, Pattern
 
 
-# class BodyThrowInline(admin.TabularInline):
-#     model = BodyThrow
-#     extra = 1
-#
-#
-#
+class BodyThrowInline(admin.TabularInline):
+    model = BodyThrow
+    extra = 1
+
+
 class ModifierInline(admin.StackedInline):
     model = Modifier
     classes = ['collapse']
@@ -19,7 +18,8 @@ class DifficultyInline(admin.StackedInline):
 
 
 class PatternAdmin(admin.ModelAdmin):
-    inlines = [ModifierInline,
+    inlines = [BodyThrowInline,
+               ModifierInline,
                DifficultyInline]
 
 
