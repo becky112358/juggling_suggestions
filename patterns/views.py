@@ -5,8 +5,10 @@ from .models import Pattern
 
 def index(request):
     pattern_list = Pattern.objects.all()
+    prop_type_list = [prop_type for prop_type in Pattern.PropType]
     return render(request, 'patterns/index.html',
-                  {'pattern_list': pattern_list})
+                  {'pattern_list': pattern_list,
+                   'prop_type_list': prop_type_list})
 
 
 def detail(request, pattern_id):

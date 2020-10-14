@@ -22,6 +22,7 @@ class Pattern(models.Model):
         s = str(self.difficulty.n_objects)
         s += " " + self.prop_type
         s += " " + self.siteswap
+        # TODO fixme
         if hasattr(self, 'body_throw'):
             s += " " + str(self.body_throw)
         if hasattr(self, 'modifier'):

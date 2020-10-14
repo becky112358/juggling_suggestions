@@ -7,31 +7,16 @@
 <body>
     <h1>Patterns Index</h1>
     {% if pattern_list %}
-    <!--TODO Eek! Loop over PropTypes.-->
-        <h2>Balls</h2>
-        <ul>
-        {% for pattern in pattern_list %}
-            {% if pattern.prop_type == 'ball' %}
-                <li><a href="{% url 'patterns:detail' pattern.id %}">{{ pattern.siteswap }}</a></li>
-            {% endif %}
+        {% for prop_type in prop_type_list %}
+            <h2>{{ prop_type }}s</h2>
+            <ul>
+            {% for pattern in pattern_list %}
+                {% if pattern.prop_type == prop_type %}
+                    <li><a href="{% url 'patterns:detail' pattern.id %}">{{ pattern }}</a></li>
+                {% endif %}
+            {% endfor %}
+            </ul>
         {% endfor %}
-        </ul>
-        <h2>Clubs</h2>
-        <ul>
-        {% for pattern in pattern_list %}
-            {% if pattern.prop_type == 'club' %}
-                <li><a href="{% url 'patterns:detail' pattern.id %}">{{ pattern.siteswap }}</a></li>
-            {% endif %}
-        {% endfor %}
-        </ul>
-        <h2>Rings</h2>
-        <ul>
-        {% for pattern in pattern_list %}
-            {% if pattern.prop_type == 'ring' %}
-                <li><a href="{% url 'patterns:detail' pattern.id %}">{{ pattern.siteswap }}</a></li>
-            {% endif %}
-        {% endfor %}
-        </ul>
     {% else %}
         <p>No patterns are available.</p>
     {% endif %}
