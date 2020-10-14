@@ -6,19 +6,17 @@
 </head>
 <body>
     <h1>Patterns Index</h1>
-    {% if pattern_list %}
-        {% for prop_type in prop_type_list %}
-            <h2>{{ prop_type }}s</h2>
-            <ul>
-            {% for pattern in pattern_list %}
-                {% if pattern.prop_type == prop_type %}
-                    <li><a href="{% url 'patterns:detail' pattern.id %}">{{ pattern }}</a></li>
-                {% endif %}
-            {% endfor %}
-            </ul>
+    {% for prop_type in prop_type_list %}
+        <h2>{{ prop_type|capfirst }}s</h2>
+        <ul>
+        {% for pattern in pattern_list %}
+            {% if pattern.prop_type == prop_type %}
+                <li><a href="{% url 'patterns:detail' pattern.id %}">{{ pattern }}</a></li>
+            {% endif %}
         {% endfor %}
-    {% else %}
+        </ul>
+    {% empty %}
         <p>No patterns are available.</p>
-    {% endif %}
+    {% endfor %}
 </body>
 </html>
