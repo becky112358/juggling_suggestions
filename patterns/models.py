@@ -1,48 +1,20 @@
-from enum import Enum
-
 from django.db import models
-
-
-class Modifier(Enum):
-    MILLS_MESS = "Mills' mess"
-    WHILE_BALANCING_A_CLUB_ON_THE_FACE = "while balancing a club on the face"
-
-
-class BodyThrow(Enum):
-    BEHIND_THE_BACK = "behind the back"
-    BEHIND_THE_SHOULDER = "behind the shoulder"
-    UNDER_THE_ARM = "under the arm"
-    UNDER_THE_LEG = "under the leg"
-
-
-class BodyThrowType(Enum):
-    CATCH = "catch"
-    THROW = "throw"
-    CATCH_AND_THROW = "catch and throw"
+from django.utils.translation import gettext_lazy as _
 
 
 class Pattern(models.Model):
 
     class PropType(models.TextChoices):
-        BALL = 'ball'
-        CLUB = 'club'
-        RING = 'ring'
+        BALL = 'ball', _('ball')
+        CLUB = 'club', _('club')
+        RING = 'ring', _('ring')
 
     # TODO should be a list of integers of base 62
     siteswap = models.CharField(max_length=200)
     prop_type = models.CharField(
         max_length=5,
         choices=PropType.choices)
-    modifiers = models.JSONField(
-        default=list,
-        choices=[(tag.name, tag.value) for tag in Modifier])
-    # Body throw should be a list of tuples
-    # [(x, behind the back, throw), (y, under the leg, throw)]
-    body_throw = models.JSONField(
-        default=list,
-        choices=[(tag.name, tag.value) for tag in BodyThrow])
-#  int(base=62),  # TODO should be a selection from siteswap
-#  [(tag, tag.value) for tag in BodyThrowType]))
+
     # User-unique information:
     # Date, number of catches
 
@@ -50,11 +22,57 @@ class Pattern(models.Model):
         s = str(self.difficulty.n_objects)
         s += " " + self.prop_type
         s += " " + self.siteswap
-        for m in self.modifiers:
-            s += " " + m
-        for b in self.body_throw:
-            s += " " + b
+        if hasattr(self, 'modifier'):
+            s += " " + str(self.modifier)
+#        for b in self.body_throw:
+#            s += " " + b
         return s
+
+
+class Modifier(models.Model):
+    pattern = models.OneToOneField(Pattern, on_delete=models.CASCADE)
+
+    mills_mess = models.BooleanField(verbose_name="Mill's mess")
+    while_balancing_a_club_on_the_face = models.BooleanField()
+    while_standing_on_a_rolla_bolla = models.BooleanField()
+
+    def __str__(self):
+        # TODO eek so much duplicate code
+        s = ""
+        if self.mills_mess:
+            s += ", Mills' mess"
+        if self.while_balancing_a_club_on_the_face:
+            s += ", while balancing a club on the face"
+        if self.while_standing_on_a_rolla_bolla:
+            s += ", while standing on a rolla bolla"
+        return s
+
+#
+# class BodyThrow(models.Model):
+#
+#     class BodyThrowType(models.TextChoices):
+#         BEHIND_THE_BACK = 'behind the back', _('behind the back')
+#         BEHIND_THE_SHOULDER = 'behind the shoulder', _('behind the shoulder')
+#         UNDER_THE_ARM = 'under the arm', _('under the arm')
+#         UNDER_THE_LEG = 'under the leg', _('under the leg')
+#
+#     class BodyThrowMoment(models.TextChoices):
+#         CATCH = "catch", _('catch')
+#         THROW = "throw", _('throw')
+#         CATCH_AND_THROW = "catch and throw", _('catch and throw')
+#
+#     pattern = models.ForeignKey(Pattern, on_delete=models.CASCADE)
+#     throw_number = models.CharField(
+#         max_length=1
+#     )
+#     throw_type = models.CharField(
+#         max_length=20,
+#         choices=BodyThrowType.choices
+#     )
+#     throw_moment = models.CharField(
+#         max_length=15,
+#         choices=BodyThrowMoment.choices
+#     )
 
 
 class Difficulty(models.Model):
