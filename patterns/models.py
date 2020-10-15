@@ -18,6 +18,49 @@ def validate_siteswap_characters(siteswap):
             )
 
 
+def siteswap_average(siteswap):
+    n_throws = 0
+    total = 0
+    sync_throw = False
+    multiplex_throw = False
+    for s in siteswap:
+        if s == '(':
+            sync_throw = True
+        elif sync_throw:
+            if s == ',':
+                n_throws += 1
+            elif s == ')':
+                n_throws += 1
+                sync_throw = False
+        elif s == '[':
+            n_throws += 1
+            multiplex_throw = True
+        elif multiplex_throw:
+            if s == ']':
+                multiplex_throw = False
+        elif s != '*':
+            n_throws += 1
+
+        # TODO Provide support beyond base 36
+        if s.isdigit() or (s.isalpha() and s != 'x'):
+            total += int(s, base=36)
+
+    average = total / n_throws
+
+    return n_throws, total, average
+
+
+def validate_siteswap_integer_average(siteswap):
+    n_throws, total, _unused = siteswap_average(siteswap)
+    average_is_integer = (n_throws > 0) and (total % n_throws == 0)
+
+    if not average_is_integer:
+        raise ValidationError(
+            _('%(siteswap)s has a non-integer average'),
+            params={'siteswap': siteswap},
+        )
+
+
 class Pattern(models.Model):
 
     class PropType(models.TextChoices):
@@ -28,7 +71,8 @@ class Pattern(models.Model):
     # TODO should be a list of integers of base 62
     siteswap = models.CharField(
         max_length=200,
-        validators=[validate_siteswap_characters]
+        validators=[validate_siteswap_characters,
+                    validate_siteswap_integer_average]
     )
     prop_type = models.CharField(
         max_length=5,
