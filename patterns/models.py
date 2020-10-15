@@ -45,7 +45,7 @@ def siteswap_average(siteswap):
         if s.isdigit() or (s.isalpha() and s != 'x'):
             total += int(s, base=36)
 
-    average = total / n_throws
+    average = int(total / n_throws)
 
     return n_throws, total, average
 
@@ -151,13 +151,19 @@ class Modifier(models.Model):
 class Difficulty(models.Model):
     pattern = models.OneToOneField(Pattern, on_delete=models.CASCADE)
     n_objects = models.PositiveIntegerField(default=20,
-                                            verbose_name="number of objects")
+                                            verbose_name="number of objects",
+                                            editable=False)
     max_height_minus_min_height = models.IntegerField(default=20,
                                                       verbose_name="maximum height - minimum height")
     body_throw_difficulty = models.IntegerField(default=100)
 
     class Meta:
         verbose_name_plural = "Difficulty"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if hasattr(self, 'pattern'):
+            _, _, self.n_objects = siteswap_average(self.pattern.siteswap)
 
     def __str__(self):
         return "\n              n objects: " + str(self.n_objects) \
