@@ -44,8 +44,10 @@
     <a href="">Pick me a pattern!</a>
     {% for similar_pattern in pattern_list %}
         {% if similar_pattern.difficulty.n_objects == pattern.difficulty.n_objects %}
-        <br>
-        <a href="{% url 'patterns:detail' similar_pattern.id %}">{{ similar_pattern }}</a>
+            {% if similar_pattern != pattern %}
+            <br>
+            <a href="{% url 'patterns:detail' similar_pattern.id %}">{{ similar_pattern }}</a>
+            {% endif %}
         {% endif %}
     {% endfor %}
 </body>
