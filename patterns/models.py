@@ -83,7 +83,9 @@ class Pattern(models.Model):
     # Date, number of catches
 
     def __str__(self):
-        s = str(self.difficulty.n_objects)
+        s = ""
+        if hasattr(self, 'difficulty'):
+            s = str(self.difficulty.n_objects)
         s += " " + self.prop_type
         s += " " + self.siteswap
         # TODO fixme
