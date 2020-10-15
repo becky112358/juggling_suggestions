@@ -148,13 +148,25 @@ class Modifier(models.Model):
         return s
 
 
+def max_height_minus_min_height(siteswap):
+    max_height = 0
+    min_height = 100
+    for s in siteswap:
+        if s.isdigit() or s.isalpha() and s != 'x':
+            number = int(s, base=36)
+            if number > max_height:
+                max_height = number
+            if number < min_height:
+                min_height = number
+    return max_height - min_height
+
+
 class Difficulty(models.Model):
     pattern = models.OneToOneField(Pattern, on_delete=models.CASCADE)
-    n_objects = models.PositiveIntegerField(default=20,
-                                            verbose_name="number of objects",
+    n_objects = models.PositiveIntegerField(verbose_name="number of objects",
                                             editable=False)
-    max_height_minus_min_height = models.IntegerField(default=20,
-                                                      verbose_name="maximum height - minimum height")
+    max_height_minus_min_height = models.IntegerField(verbose_name="maximum height - minimum height",
+                                                      editable=False)
     body_throw_difficulty = models.IntegerField(default=100)
 
     class Meta:
@@ -164,6 +176,7 @@ class Difficulty(models.Model):
         super().__init__(*args, **kwargs)
         if hasattr(self, 'pattern'):
             _, _, self.n_objects = siteswap_average(self.pattern.siteswap)
+            self.max_height_minus_min_height = max_height_minus_min_height(self.pattern.siteswap)
 
     def __str__(self):
         return "\n              n objects: " + str(self.n_objects) \
