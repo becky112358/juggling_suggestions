@@ -3,11 +3,31 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
+def siteswap_character_is_throw(s):
+    throw = False
+    if s.isdigit():
+        throw = True
+    # TODO sometimes x is a throw
+    elif s.isalpha() and s != 'x':
+        throw = True
+    return throw
+
+
+def siteswap_character_height(s):
+    height = 0
+    if s.isdigit():
+        height = int(s)
+    elif s.isalpha():
+        if s.islower():
+            height = ord(s) - ord('a') + 10
+        else:
+            height = ord(s) - ord('A') + 36
+    return height
+
+
 def validate_siteswap_characters(siteswap):
     for s in siteswap:
-        if s.isdigit():
-            continue
-        elif s.isalpha():
+        if siteswap_character_is_throw(s):
             continue
         elif s in ['(', ')', '[', ']', '*', ',']:
             continue
@@ -32,9 +52,7 @@ def validate_siteswap_brackets(siteswap):
             multiplex_throw = True
             if i >= len(siteswap) - 3:
                 ok = False
-            elif not siteswap[i+1].isdigit() and not siteswap[i+1].isalpha():
-                ok = False
-            elif not siteswap[i+2].isdigit() and not siteswap[i+2].isalpha():
+            elif not siteswap_character_is_throw(siteswap[i+1]) and not siteswap_character_is_throw(siteswap[i+2]):
                 ok = False
         elif siteswap[i] == ']':
             if not multiplex_throw:
@@ -55,9 +73,7 @@ def validate_siteswap_brackets(siteswap):
                 ok = False
             elif i == len(siteswap) - 1:
                 ok = False
-            elif not siteswap[i-1].isdigit() and not siteswap[i-1].isalpha():
-                ok = False
-            elif not siteswap[i+1].isdigit() and not siteswap[i+1].isalpha():
+            elif not siteswap_character_is_throw(siteswap[i-1]) and not siteswap_character_is_throw(siteswap[i+1]):
                 ok = False
         elif siteswap[i] == '*':
             if i != len(siteswap) - 1:
@@ -102,9 +118,8 @@ def siteswap_average(siteswap):
         elif s != '*':
             n_throws += 1
 
-        # TODO Provide support beyond base 36
-        if s.isdigit() or (s.isalpha() and s != 'x'):
-            total += int(s, base=36)
+        if siteswap_character_is_throw(s):
+            total += siteswap_character_height(s)
 
     average = int(total / n_throws)
 
@@ -129,7 +144,6 @@ class Pattern(models.Model):
         CLUB = 'club', _('club')
         RING = 'ring', _('ring')
 
-    # TODO should be a list of integers of base 62
     siteswap = models.CharField(
         max_length=200,
         validators=[validate_siteswap_characters,
@@ -216,12 +230,12 @@ def max_height_minus_min_height(siteswap):
     max_height = 0
     min_height = 100
     for s in siteswap:
-        if s.isdigit() or s.isalpha() and s != 'x':
-            number = int(s, base=36)
-            if number > max_height:
-                max_height = number
-            if number < min_height:
-                min_height = number
+        if siteswap_character_is_throw(s):
+            height = siteswap_character_height(s)
+            if height > max_height:
+                max_height = height
+            if height < min_height:
+                min_height = height
     return max_height - min_height
 
 
