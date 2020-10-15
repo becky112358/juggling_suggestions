@@ -1,5 +1,21 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+
+def validate_siteswap_characters(siteswap):
+    for s in siteswap:
+        if s.isdigit():
+            continue
+        elif s.isalpha():
+            continue
+        elif s in ['(', ')', '[', ']', '*', ',']:
+            continue
+        else:
+            raise ValidationError(
+                _('%(siteswap)s contains invalid siteswap characters'),
+                params={'siteswap': siteswap},
+            )
 
 
 class Pattern(models.Model):
@@ -10,10 +26,14 @@ class Pattern(models.Model):
         RING = 'ring', _('ring')
 
     # TODO should be a list of integers of base 62
-    siteswap = models.CharField(max_length=200)
+    siteswap = models.CharField(
+        max_length=200,
+        validators=[validate_siteswap_characters]
+    )
     prop_type = models.CharField(
         max_length=5,
-        choices=PropType.choices)
+        choices=PropType.choices
+    )
 
     # User-unique information:
     # Date, number of catches
