@@ -18,6 +18,67 @@ def validate_siteswap_characters(siteswap):
             )
 
 
+def validate_siteswap_brackets(siteswap):
+    ok = True
+    sync_throw = False
+    sync_throw_found_comma = False
+    multiplex_throw = False
+    for i in range(len(siteswap)):
+        if siteswap[i] == '(':
+            sync_throw = True
+            if multiplex_throw:
+                ok = False
+        elif siteswap[i] == '[':
+            multiplex_throw = True
+            if i >= len(siteswap) - 3:
+                ok = False
+            elif not siteswap[i+1].isdigit() and not siteswap[i+1].isalpha():
+                ok = False
+            elif not siteswap[i+2].isdigit() and not siteswap[i+2].isalpha():
+                ok = False
+        elif siteswap[i] == ']':
+            if not multiplex_throw:
+                ok = False
+            multiplex_throw = False
+        elif siteswap[i] == ')':
+            if multiplex_throw:
+                ok = False
+            if not sync_throw_found_comma:
+                ok = False
+            sync_throw = False
+            sync_throw_found_comma = False
+        elif siteswap[i] == ',':
+            sync_throw_found_comma = True
+            if not sync_throw:
+                ok = False
+            elif multiplex_throw:
+                ok = False
+            elif i == len(siteswap) - 1:
+                ok = False
+            elif not siteswap[i-1].isdigit() and not siteswap[i-1].isalpha():
+                ok = False
+            elif not siteswap[i+1].isdigit() and not siteswap[i+1].isalpha():
+                ok = False
+        elif siteswap[i] == '*':
+            if i != len(siteswap) - 1:
+                ok = False
+            elif len(siteswap) == 1:
+                ok = False
+            elif siteswap[i-1] != ')':
+                ok = False
+
+    if multiplex_throw:
+        ok = False
+    if sync_throw:
+        ok = False
+
+    if not ok:
+        raise ValidationError(
+            _('%(siteswap)s contains bracket problems'),
+            params={'siteswap': siteswap},
+        )
+
+
 def siteswap_average(siteswap):
     n_throws = 0
     total = 0
@@ -72,6 +133,7 @@ class Pattern(models.Model):
     siteswap = models.CharField(
         max_length=200,
         validators=[validate_siteswap_characters,
+                    validate_siteswap_brackets,
                     validate_siteswap_integer_average]
     )
     prop_type = models.CharField(

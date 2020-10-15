@@ -15,6 +15,10 @@ class PatternModelTests(TestCase):
         invalid_siteswaps = [
             '1&2&3',
             '1234',
+            '(6,4',
+            '[0,4][(44),(44)]',
+            '(0,4)([44],[44)]',
+            '123]',
         ]
 
         for i in range(len(invalid_siteswaps)):
