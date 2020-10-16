@@ -164,16 +164,20 @@ class Pattern(models.Model):
             s = str(self.difficulty.n_objects)
         s += " " + self.prop_type
         s += " " + self.siteswap
-        body_throw_already_printed = False
+        first = True
         if hasattr(self, 'bodythrow_set'):
             for b in self.bodythrow_set.all():
-                if not body_throw_already_printed:
-                    body_throw_already_printed = True
+                if first:
+                    first = False
                 else:
                     s += ","
                 s += " " + str(b)
         if hasattr(self, 'modifier'):
-            s += " " + str(self.modifier)
+            if first:
+                s += " "
+            else:
+                s += ", "
+            s += str(self.modifier)
         return s
 
 
@@ -208,6 +212,16 @@ class BodyThrow(models.Model):
         return "with the " + self.throw_moment + " " + self.catch_or_throw + " " + self.throw_type
 
 
+def add_modifier_text(modifier_present, modifier_name, s, first):
+    if modifier_present:
+        if first:
+            first = False
+        else:
+            s += ", "
+        s += modifier_name
+    return s, first
+
+
 class Modifier(models.Model):
     pattern = models.OneToOneField(Pattern, on_delete=models.CASCADE)
 
@@ -216,18 +230,13 @@ class Modifier(models.Model):
     while_standing_on_a_rolla_bolla = models.BooleanField()
 
     def __str__(self):
-        # TODO eek duplicate code
+        first = True
         s = ""
-        if self.mills_mess:
-            s += "Mills' mess"
-        if self.while_balancing_a_club_on_the_face:
-            if s != "":
-                s += ", "
-            s += "while balancing a club on the face"
-        if self.while_standing_on_a_rolla_bolla:
-            if s != "":
-                s += ", "
-            s += "while standing on a rolla bolla"
+        s, first = add_modifier_text(self.mills_mess, Modifier.mills_mess.field.verbose_name, s, first)
+        s, first = add_modifier_text(self.while_balancing_a_club_on_the_face,
+                                     Modifier.while_balancing_a_club_on_the_face.field.verbose_name, s, first)
+        s, first = add_modifier_text(self.while_standing_on_a_rolla_bolla,
+                                     Modifier.while_standing_on_a_rolla_bolla.field.verbose_name, s, first)
         return s
 
 
