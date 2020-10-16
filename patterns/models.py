@@ -250,7 +250,9 @@ class Difficulty(models.Model):
                                             editable=False)
     max_height_minus_min_height = models.IntegerField(verbose_name="maximum height - minimum height",
                                                       editable=False)
-    body_throw_difficulty = models.IntegerField(default=100)
+    body_throw_difficulty = models.IntegerField(default=0,
+                                                verbose_name="Body throw difficulty "
+                                                             "(0: no body throws, 100: maximum difficulty)")
 
     class Meta:
         verbose_name_plural = "Difficulty"
