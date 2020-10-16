@@ -164,9 +164,14 @@ class Pattern(models.Model):
             s = str(self.difficulty.n_objects)
         s += " " + self.prop_type
         s += " " + self.siteswap
-        # TODO fixme
-        if hasattr(self, 'body_throw'):
-            s += " " + str(self.body_throw)
+        body_throw_already_printed = False
+        if hasattr(self, 'bodythrow_set'):
+            for b in self.bodythrow_set.all():
+                if not body_throw_already_printed:
+                    body_throw_already_printed = True
+                else:
+                    s += ","
+                s += " " + str(b)
         if hasattr(self, 'modifier'):
             s += " " + str(self.modifier)
         return s

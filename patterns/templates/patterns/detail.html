@@ -17,7 +17,7 @@
         </tr>
         <tr>
             <td>Body throws</td>
-            <td>{% for body_throw in pattern.body_throws %}: {{ body_throw }}<br>{% endfor %}</td>
+            <td>{% for body_throw in pattern.bodythrow_set.all %}: {{ body_throw }}<br>{% endfor %}</td>
         </tr>
         <tr>
             <td>Modifiers</td>
