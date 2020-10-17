@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Juggling Idea Generator</title>
-</head>
-<body>
+{% extends "base_generic.html" %}
+
+{% block content %}
     <h1>Patterns Index</h1>
     {% for prop_type in prop_type_list %}
         <h2>{{ prop_type|capfirst }}s</h2>
@@ -18,5 +14,4 @@
     {% empty %}
         <p>No patterns are available.</p>
     {% endfor %}
-</body>
-</html>
+{% endblock %}

@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Juggling Idea Generator: Patterns similar to {{ pattern.siteswap }}</title>
-</head>
-<body>
+{% extends "base_generic.html" %}
+
+{% block content %}
     <h1>Pattern</h1>
     <table>
         <tr>
@@ -56,5 +52,4 @@
             {% endif %}
         {% endif %}
     {% endfor %}
-</body>
-</html>
+{% endblock %}
