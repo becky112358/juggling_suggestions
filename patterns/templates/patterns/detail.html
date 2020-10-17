@@ -39,7 +39,13 @@
             <td>: {{ pattern.difficulty.body_throw_difficulty }}</td>
         </tr>
     </table>
+
+    {% if user.is_authenticated %}
+        <h1>Your pattern logs</h1>
+    {% endif %}
+
     <h1>Choose your difficulty</h1>
+
     <h1>Patterns of a similar difficulty</h1>
     <a href="">Pick me a pattern!</a>
     {% for similar_pattern in pattern_list %}

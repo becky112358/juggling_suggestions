@@ -1,4 +1,6 @@
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -261,7 +263,8 @@ class Difficulty(models.Model):
                                                       editable=False)
     body_throw_difficulty = models.IntegerField(default=0,
                                                 verbose_name="Body throw difficulty "
-                                                             "(0: no body throws, 100: maximum difficulty)")
+                                                             "(0: no body throws, 100: maximum difficulty)",
+                                                validators=[MinValueValidator(0), MaxValueValidator(100)])
 
     class Meta:
         verbose_name_plural = "Difficulty"
@@ -276,3 +279,11 @@ class Difficulty(models.Model):
         return "\n              n objects: " + str(self.n_objects) \
               + "\nmax height - min height: " + str(self.max_height_minus_min_height) \
               + "\n  body throw difficulty: " + str(self.body_throw_difficulty)
+
+
+class Record(models.Model):
+    pattern = models.ForeignKey(Pattern, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    number_of_catches = models.IntegerField(default=0, validators=[MinValueValidator(0)])
+    date = models.DateField()
+
