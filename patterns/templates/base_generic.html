@@ -5,6 +5,16 @@
     <meta charset="UTF-8">
 </head>
 <body>
+    {% block sidebar %}
+    <ul class="sidebar-nav">
+        <li><a href="">Patterns Index</a></li>
+        {% if user.is_authenticated %}
+            <li><a href="">Log out</a></li>
+        {% else %}
+            <li><a href="">Log in</a></li>
+        {% endif %}
+    </ul>
+    {% endblock %}
     {% block content %}{% endblock %}
 </body>
 </html>
