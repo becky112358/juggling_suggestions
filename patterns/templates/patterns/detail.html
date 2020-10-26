@@ -4,6 +4,10 @@
     <h1>Pattern</h1>
     <table>
         <tr>
+            <td>Number of Jugglers</td>
+            <td>: {{ pattern.n_jugglers }}</td>
+        </tr>
+        <tr>
             <td>Siteswap</td>
             <td>: {{ pattern.siteswap }}</td>
         </tr>
@@ -40,15 +44,12 @@
         <h1>Your pattern logs</h1>
     {% endif %}
 
-    <h1>Choose your difficulty</h1>
-
     <h1>Patterns of a similar difficulty</h1>
-    <a href="">Pick me a pattern!</a>
     {% for similar_pattern in pattern_list %}
         {% if similar_pattern.difficulty.n_objects == pattern.difficulty.n_objects %}
             {% if similar_pattern != pattern %}
-            <br>
             <a href="{% url 'patterns:detail' similar_pattern.id %}">{{ similar_pattern }}</a>
+            <br>
             {% endif %}
         {% endif %}
     {% endfor %}

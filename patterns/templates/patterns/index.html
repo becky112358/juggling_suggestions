@@ -2,6 +2,7 @@
 
 {% block content %}
     <h1>Patterns Index</h1>
+    <h2>Solo Patterns</h2>
     {% for prop_type in prop_type_list %}
         <h2>{{ prop_type|capfirst }}s</h2>
         <ul>
@@ -11,7 +12,6 @@
             {% endif %}
         {% endfor %}
         </ul>
-    {% empty %}
-        <p>No patterns are available.</p>
     {% endfor %}
+    <h2>2 Person Passing Patterns</h2>
 {% endblock %}
