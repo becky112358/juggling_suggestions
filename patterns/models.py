@@ -123,7 +123,10 @@ def siteswap_average(siteswap):
         if siteswap_character_is_throw(s):
             total += siteswap_character_height(s)
 
-    average = int(total / n_throws)
+    if n_throws == 0:
+        average = 0
+    else:
+        average = int(total / n_throws)
 
     return n_throws, total, average
 
@@ -141,29 +144,48 @@ def validate_siteswap_integer_average(siteswap):
 
 class Pattern(models.Model):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        _, _, self.n_objects = siteswap_average(self.siteswap)
+        self.max_height_minus_min_height = max_height_minus_min_height(self.siteswap)
+
     class PropType(models.TextChoices):
         BALL = 'ball', _('ball')
         CLUB = 'club', _('club')
         RING = 'ring', _('ring')
 
+    n_jugglers = models.PositiveIntegerField(
+        name="number of jugglers",
+        default=1,
+        validators=[MinValueValidator(1)]
+    )
+    n_objects = models.PositiveIntegerField(default=0,
+                                            verbose_name="number of objects",
+                                            editable=False)
+    prop_type = models.CharField(
+        max_length=5,
+        choices=PropType.choices
+    )
     siteswap = models.CharField(
         max_length=200,
         validators=[validate_siteswap_characters,
                     validate_siteswap_brackets,
                     validate_siteswap_integer_average]
     )
-    prop_type = models.CharField(
-        max_length=5,
-        choices=PropType.choices
-    )
 
-    # User-unique information:
-    # Date, number of catches
+    max_height_minus_min_height = models.IntegerField(default=0,
+                                                      verbose_name="maximum height - minimum height",
+                                                      editable=False)
+    body_throw_difficulty = models.IntegerField(default=0,
+                                                verbose_name="Body throw difficulty "
+                                                             "(0: no body throws, 100: maximum difficulty)",
+                                                validators=[MinValueValidator(0), MaxValueValidator(100)])
 
     def __str__(self):
         s = ""
-        if hasattr(self, 'difficulty'):
-            s = str(self.difficulty.n_objects)
+        if hasattr(self, 'n_jugglers'):
+            s += str(self.n_jugglers) + " juggler "
+        s += str(self.n_objects)
         s += " " + self.prop_type
         s += " " + self.siteswap
         first = True
@@ -255,37 +277,9 @@ def max_height_minus_min_height(siteswap):
     return max_height - min_height
 
 
-class Difficulty(models.Model):
-    pattern = models.OneToOneField(Pattern, on_delete=models.CASCADE)
-    n_objects = models.PositiveIntegerField(default=0,
-                                            verbose_name="number of objects",
-                                            editable=False)
-    max_height_minus_min_height = models.IntegerField(default=0,
-                                                      verbose_name="maximum height - minimum height",
-                                                      editable=False)
-    body_throw_difficulty = models.IntegerField(default=0,
-                                                verbose_name="Body throw difficulty "
-                                                             "(0: no body throws, 100: maximum difficulty)",
-                                                validators=[MinValueValidator(0), MaxValueValidator(100)])
-
-    class Meta:
-        verbose_name_plural = "Difficulty"
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if hasattr(self, 'pattern'):
-            _, _, self.n_objects = siteswap_average(self.pattern.siteswap)
-            self.max_height_minus_min_height = max_height_minus_min_height(self.pattern.siteswap)
-
-    def __str__(self):
-        return "\n              n objects: " + str(self.n_objects) \
-              + "\nmax height - min height: " + str(self.max_height_minus_min_height) \
-              + "\n  body throw difficulty: " + str(self.body_throw_difficulty)
-
-
 class Record(models.Model):
     pattern = models.ForeignKey(Pattern, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_or_team = models.ForeignKey(User, on_delete=models.CASCADE)
     number_of_catches = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     date = models.DateField()
 
