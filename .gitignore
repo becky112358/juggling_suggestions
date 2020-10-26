@@ -1,5 +1,7 @@
 juggling_suggestions/secrets.py
 
+*.pyc
+.cache
 .idea
 __pycache__
 
