@@ -2,16 +2,23 @@
 
 {% block content %}
     <h1>Patterns Index</h1>
-    <h2>Solo Patterns</h2>
-    {% for prop_type in prop_type_list %}
-        <h2>{{ prop_type|capfirst }}s</h2>
-        <ul>
-        {% for pattern in pattern_list %}
-            {% if pattern.prop_type == prop_type %}
-                <li><a href="{% url 'patterns:detail' pattern.id %}">{{ pattern }}</a></li>
-            {% endif %}
+    {% for n_jugglers in n_jugglers_list %}
+        {% if n_jugglers == 1 %}
+            <h2>Solo Patterns</h2>
+        {% else %}
+            <h2>{{ n_jugglers }} Person Passing Patterns</h2>
+        {% endif %}
+
+        {% for prop_type in prop_type_list %}
+            <h2>{{ prop_type|capfirst }}s</h2>
+            <ul>
+            {% for pattern in pattern_list %}
+                {% if pattern.n_jugglers == n_jugglers and pattern.prop_type == prop_type %}
+                    <li><a href="{% url 'patterns:detail' pattern.id %}">{{ pattern }}</a></li>
+                {% endif %}
+            {% endfor %}
+            </ul>
         {% endfor %}
-        </ul>
+
     {% endfor %}
-    <h2>2 Person Passing Patterns</h2>
 {% endblock %}

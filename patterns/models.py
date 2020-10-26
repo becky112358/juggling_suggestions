@@ -155,13 +155,15 @@ class Pattern(models.Model):
         RING = 'ring', _('ring')
 
     n_jugglers = models.PositiveIntegerField(
-        name="number of jugglers",
+        verbose_name="number of jugglers",
         default=1,
         validators=[MinValueValidator(1)]
     )
-    n_objects = models.PositiveIntegerField(default=0,
-                                            verbose_name="number of objects",
-                                            editable=False)
+    n_objects = models.PositiveIntegerField(
+        default=0,
+        verbose_name="number of objects",
+        editable=False
+    )
     prop_type = models.CharField(
         max_length=5,
         choices=PropType.choices
@@ -173,18 +175,20 @@ class Pattern(models.Model):
                     validate_siteswap_integer_average]
     )
 
-    max_height_minus_min_height = models.IntegerField(default=0,
-                                                      verbose_name="maximum height - minimum height",
-                                                      editable=False)
-    body_throw_difficulty = models.IntegerField(default=0,
-                                                verbose_name="Body throw difficulty "
-                                                             "(0: no body throws, 100: maximum difficulty)",
-                                                validators=[MinValueValidator(0), MaxValueValidator(100)])
+    max_height_minus_min_height = models.IntegerField(
+        default=0,
+        verbose_name="maximum height - minimum height",
+        editable=False
+    )
+    body_throw_difficulty = models.IntegerField(
+        default=0,
+        verbose_name="Body throw difficulty "
+                     "(0: no body throws, 100: maximum difficulty)",
+        validators=[MinValueValidator(0), MaxValueValidator(100)]
+    )
 
     def __str__(self):
-        s = ""
-        if hasattr(self, 'n_jugglers'):
-            s += str(self.n_jugglers) + " juggler "
+        s = str(self.n_jugglers) + " juggler "
         s += str(self.n_objects)
         s += " " + self.prop_type
         s += " " + self.siteswap
