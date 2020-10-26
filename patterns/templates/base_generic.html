@@ -7,14 +7,14 @@
 <body>
     {% block sidebar %}
     <ul class="sidebar-nav">
-        <li><a href="">Overview</a></li>
+        <li><a href="{% url 'patterns:index' %}">Overview</a></li>
         <li><a href="">Training Plan</a></li>
         <li><a href="">Training Statistics</a></li>
         <li><a href="">Goals</a></li>
         {% if user.is_authenticated %}
-            <li><a href="">Log out</a></li>
+            <li><a href="{% url 'logout' %}">Log out</a></li>
         {% else %}
-            <li><a href="">Log in</a></li>
+            <li><a href="{% url 'login' %}">Log in</a></li>
         {% endif %}
     </ul>
     {% endblock %}
