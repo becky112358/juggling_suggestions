@@ -257,9 +257,11 @@ def max_height_minus_min_height(siteswap):
 
 class Difficulty(models.Model):
     pattern = models.OneToOneField(Pattern, on_delete=models.CASCADE)
-    n_objects = models.PositiveIntegerField(verbose_name="number of objects",
+    n_objects = models.PositiveIntegerField(default=0,
+                                            verbose_name="number of objects",
                                             editable=False)
-    max_height_minus_min_height = models.IntegerField(verbose_name="maximum height - minimum height",
+    max_height_minus_min_height = models.IntegerField(default=0,
+                                                      verbose_name="maximum height - minimum height",
                                                       editable=False)
     body_throw_difficulty = models.IntegerField(default=0,
                                                 verbose_name="Body throw difficulty "
