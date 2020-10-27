@@ -1,0 +1,46 @@
+body {
+    background-color: #ddffdd;
+}
+
+.sidebar {
+    margin: 0;
+    padding: 0;
+    width: 185px;
+    background-color: #aaffaa;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+}
+
+/* Sidebar links */
+.sidebar a {
+    display: block;
+    color: black;
+    padding: 16px;
+    text-decoration: none;
+}
+
+/* Links on mouse-over */
+.sidebar a:hover:not(.active) {
+    background-color: #009900;
+    color: white;
+}
+
+/* Page content. The value of the margin-left property should match the value of the sidebar's width property */
+div.content {
+    margin-left: 185px;
+    padding: 1px 16px;
+    height: 1000px;
+}
+
+/* On screens that are less than 550px wide, make the sidebar into a vertical topbar */
+@media screen and (max-width: 550px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        text-align: center;
+        float: none;
+    }
+    div.content {margin-left: 0;}
+}

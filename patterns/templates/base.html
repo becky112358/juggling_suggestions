@@ -3,21 +3,24 @@
 <head>
     {% block title %}<title>Juggling Idea Generator</title>{% endblock %}
     <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" href="{% static "patterns/style.css" %}">
 </head>
 <body>
+    <div class="sidebar">
     {% block sidebar %}
-    <ul class="sidebar-nav">
-        <li><a href="{% url 'patterns:index' %}">Overview</a></li>
-        <li><a href="">Training Plan</a></li>
-        <li><a href="">Training Statistics</a></li>
-        <li><a href="">Goals</a></li>
+        <a href="{% url 'patterns:index' %}">Overview</a>
+        <a href="">Training Plan</a>
+        <a href="">Training Statistics</a>
+        <a href="">Goals</a>
         {% if user.is_authenticated %}
-            <li><a href="{% url 'logout' %}">Log out</a></li>
+            <a href="{% url 'logout' %}">Log Out</a>
         {% else %}
-            <li><a href="{% url 'login' %}">Log in</a></li>
+            <a href="{% url 'login' %}">Log In</a>
         {% endif %}
-    </ul>
     {% endblock %}
-    {% block content %}{% endblock %}
+    </div>
+
+    <div class="content">{% block content %}{% endblock %}</div>
 </body>
 </html>
