@@ -43,6 +43,11 @@
     {% if user.is_authenticated %}
         <h1>My pattern logs</h1>
         <a href="{% url 'patterns:log_record' pattern.id %}"><button>Log a record for this pattern</button></a>
+        {% for record in record_list %}
+            <p>{{ record }}</p>
+        {% empty %}
+            <p>No records for this pattern logged yet.</p>
+        {% endfor %}
     {% endif %}
 
     <h1>Patterns of a similar difficulty</h1>

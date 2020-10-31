@@ -22,10 +22,14 @@ def index(request):
 def detail(request, pattern_id):
     pattern_list = Pattern.objects.all()
     pattern = get_object_or_404(Pattern, pk=pattern_id)
+
+    record_list = Record.objects.filter(pattern=pattern).order_by('-date')
+
     return render(request, 'patterns/detail.html',
                   {'pattern': pattern,
                    'pattern_list': pattern_list,
-                   'modifier_list': Modifier})
+                   'modifier_list': Modifier,
+                   'record_list': record_list})
 
 
 def log_record(request, pattern_id):

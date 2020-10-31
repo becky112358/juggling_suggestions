@@ -138,3 +138,6 @@ class Record(models.Model):
     number_of_catches = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     date = models.DateField()
 
+    def __str__(self):
+        return str(self.date) + " : " + str(self.number_of_catches) + " catches"
+
