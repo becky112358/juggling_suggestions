@@ -1,6 +1,8 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, HttpResponseRedirect, render
+from django.urls import reverse
 
-from .models import Modifier, Pattern
+from .forms import RecordForm
+from .models import Modifier, Pattern, Record
 
 
 def index(request):
@@ -24,3 +26,18 @@ def detail(request, pattern_id):
                   {'pattern': pattern,
                    'pattern_list': pattern_list,
                    'modifier_list': Modifier})
+
+
+def log_record(request, pattern_id):
+    pattern = get_object_or_404(Pattern, pk=pattern_id)
+    if request.method == 'POST':
+        record = Record(pattern=pattern)
+        formset = RecordForm(request.POST, request.FILES, instance=record)
+        if formset.is_valid():
+            formset.save()
+            return HttpResponseRedirect(reverse('patterns:detail', args=(pattern.id,)))
+    else:
+        formset = RecordForm()
+    return render(request, 'patterns/log_record.html',
+                  {'pattern': pattern,
+                   'formset': formset})

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Log a record for {{ pattern }}</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        <table>
+            {{ formset.as_table }}
+        </table>
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}

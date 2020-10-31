@@ -134,7 +134,7 @@ class Modifier(models.Model):
 
 class Record(models.Model):
     pattern = models.ForeignKey(Pattern, on_delete=models.CASCADE)
-    user_or_team = models.ForeignKey(User, on_delete=models.CASCADE)
+#    user_or_team = models.ForeignKey(User, on_delete=models.CASCADE)
     number_of_catches = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     date = models.DateField()
 
