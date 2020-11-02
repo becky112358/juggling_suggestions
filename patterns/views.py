@@ -36,12 +36,14 @@ def log_record(request, pattern_id):
     pattern = get_object_or_404(Pattern, pk=pattern_id)
     if request.method == 'POST':
         record = Record(pattern=pattern)
-        formset = RecordForm(request.POST, request.FILES, instance=record)
-        if formset.is_valid():
-            formset.save()
+        form = RecordForm(request.POST, request.FILES, instance=record)
+        if form.is_valid():
+            record = form.save(commit=False)
+            record.user1 = request.user
+            record.save()
             return HttpResponseRedirect(reverse('patterns:detail', args=(pattern.id,)))
     else:
-        formset = RecordForm()
+        form = RecordForm()
     return render(request, 'patterns/log_record.html',
                   {'pattern': pattern,
-                   'formset': formset})
+                   'form': form})

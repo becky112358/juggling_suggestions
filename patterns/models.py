@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -132,9 +132,20 @@ class Modifier(models.Model):
         return s
 
 
+# class Team(models.Model):
+#     user1 = models.ForeignKey(get_user_model(),
+#                               on_delete=models.CASCADE,
+#                               related_name='primary_user')
+#     user2 = models.ForeignKey(get_user_model(),
+#                               on_delete=models.CASCADE,
+#                               related_name='partner_user')
+
+
 class Record(models.Model):
     pattern = models.ForeignKey(Pattern, on_delete=models.CASCADE)
-#    user_or_team = models.ForeignKey(User, on_delete=models.CASCADE)
+    user1 = models.ForeignKey(get_user_model(),
+                              on_delete=models.CASCADE,
+                              related_name='primary_user')
     number_of_catches = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     date = models.DateField()
 
