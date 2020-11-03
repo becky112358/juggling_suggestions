@@ -132,22 +132,18 @@ class Modifier(models.Model):
         return s
 
 
-# class Team(models.Model):
-#     user1 = models.ForeignKey(get_user_model(),
-#                               on_delete=models.CASCADE,
-#                               related_name='primary_user')
-#     user2 = models.ForeignKey(get_user_model(),
-#                               on_delete=models.CASCADE,
-#                               related_name='partner_user')
-
-
 class Record(models.Model):
     pattern = models.ForeignKey(Pattern, on_delete=models.CASCADE)
+    number_of_catches = models.IntegerField(default=0, validators=[MinValueValidator(0)])
+    date = models.DateField()
     user1 = models.ForeignKey(get_user_model(),
                               on_delete=models.CASCADE,
                               related_name='primary_user')
-    number_of_catches = models.IntegerField(default=0, validators=[MinValueValidator(0)])
-    date = models.DateField()
+    user2 = models.ForeignKey(get_user_model(),
+                              verbose_name='Other juggler',
+                              on_delete=models.CASCADE,
+                              null=True,
+                              related_name='partner_user1')
 
     def __str__(self):
         return str(self.date) + " : " + str(self.number_of_catches) + " catches"

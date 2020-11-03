@@ -8,7 +8,6 @@ from .models import Record
 
 
 class RecordForm(ModelForm):
-
     class Meta:
         model = Record
         fields = ['number_of_catches', 'date']
@@ -20,3 +19,14 @@ class RecordForm(ModelForm):
             raise ValidationError(_('You can do it! (And after you have, come back and log the record.)'))
 
         return data
+
+
+class RecordFormTwoJugglers(RecordForm):
+    def __init__(self, *args, **kwargs):
+        other_users = kwargs.pop('other_users')
+        super(RecordFormTwoJugglers, self).__init__(*args, **kwargs)
+        self.fields['user2'].queryset = other_users
+
+    class Meta:
+        model = Record
+        fields = ['number_of_catches', 'date', 'user2']
