@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, HttpResponseRedirect, render
 from django.urls import reverse
 
@@ -24,7 +25,10 @@ def detail(request, pattern_id):
     pattern_list = Pattern.objects.all()
     pattern = get_object_or_404(Pattern, pk=pattern_id)
 
-    record_list = Record.objects.filter(pattern=pattern).order_by('-date')
+    current_user = request.user
+    record_list = Record.objects.filter(pattern=pattern)\
+        .filter(Q(user1=current_user) | Q(user2=current_user))\
+        .order_by('-date')
 
     return render(request, 'patterns/detail.html',
                   {'pattern': pattern,
