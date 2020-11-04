@@ -132,6 +132,13 @@ class Modifier(models.Model):
         return s
 
 
+class Goal(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    pattern = models.ForeignKey(Pattern, on_delete=models.CASCADE)
+    row = models.IntegerField(validators=[MinValueValidator(0)])
+    column = models.IntegerField(default=0, validators=[MinValueValidator(0)])
+
+
 class Record(models.Model):
     pattern = models.ForeignKey(Pattern, on_delete=models.CASCADE)
     number_of_catches = models.IntegerField(default=0, validators=[MinValueValidator(0)])

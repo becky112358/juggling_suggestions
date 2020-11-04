@@ -3,8 +3,8 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, HttpResponseRedirect, render
 from django.urls import reverse
 
-from .forms import RecordForm, RecordFormTwoJugglers
-from .models import Modifier, Pattern, Record
+from .forms import GoalForm, RecordForm, RecordFormTwoJugglers
+from .models import Goal, Modifier, Pattern, Record
 
 
 def index(request):
@@ -26,6 +26,21 @@ def detail(request, pattern_id):
     pattern = get_object_or_404(Pattern, pk=pattern_id)
 
     current_user = request.user
+
+    if Goal.objects.filter(pattern=pattern).filter(user=current_user):
+        is_goal = True
+    else:
+        is_goal = False
+
+    if request.method == 'POST':
+        goal = Goal(user=current_user, pattern=pattern, row=0)
+        form = GoalForm(request.POST, request.FILES, instance=goal)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('patterns:detail', args=(pattern.id,)))
+    else:
+        form = GoalForm()
+
     record_list = Record.objects.filter(pattern=pattern)\
         .filter(Q(user1=current_user) | Q(user2=current_user))\
         .order_by('-date')
@@ -34,9 +49,12 @@ def detail(request, pattern_id):
                   {'pattern': pattern,
                    'pattern_list': pattern_list,
                    'modifier_list': Modifier,
+                   'is_goal': is_goal,
+                   'form': form,
                    'record_list': record_list})
 
 
+# TODO fix this tangle!
 def log_record(request, pattern_id):
     pattern = get_object_or_404(Pattern, pk=pattern_id)
     n_jugglers = pattern.n_jugglers

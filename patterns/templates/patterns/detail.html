@@ -41,6 +41,17 @@
     </table>
 
     {% if user.is_authenticated %}
+        {% if is_goal %}
+            <h2>Pattern is a goal!</h2>
+        {% else %}
+            <form action="" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Make this pattern a goal">
+            </form>
+        {% endif %}
+    {% endif %}
+
+    {% if user.is_authenticated %}
         <h1>My pattern logs</h1>
         <a href="{% url 'patterns:log_record' pattern.id %}"><button>Log a record for this pattern</button></a>
         {% for record in record_list %}
