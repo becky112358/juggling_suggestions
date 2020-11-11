@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, HttpResponseRedirect, render
 from django.urls import reverse
 
 from .forms import GoalForm, RecordForm, RecordFormTwoJugglers
-from .models import Goal, GOALS_MAX_COLUMNS, Modifier, Pattern, Record
+from .models import Goal, Modifier, Pattern, Record
 
 
 def index(request):
@@ -99,8 +99,7 @@ def goals(request):
     max_row = goals_max_row(goal_list)
     return render(request, 'patterns/goals.html',
                   {'goal_list': goal_list,
-                   'row_list': range(max_row+1),
-                   'column_list': range(GOALS_MAX_COLUMNS+1)})
+                   'row_list': range(max_row+1)})
 
 
 def goals_max_row(goal_list):

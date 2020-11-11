@@ -2,22 +2,14 @@
 
 {% block content %}
 
-    <table>
+    <ul>
         {% for row in row_list %}
-            <tr>
-                {% for column in column_list %}
-                <td>
-                    {% for goal in goal_list %}
-                        {% if goal.row == row %}
-                            {% if goal.column == column %}
-                                {{ goal }}
-                            {% endif %}
-                        {% endif %}
-                    {% endfor %}
-                </td>
-                {% endfor %}
-            </tr>
+            {% for goal in goal_list %}
+                {% if goal.row == row %}
+                    <li><a href="{% url 'patterns:detail' goal.pattern.id %}">{{ goal }}</a></li>
+                {% endif %}
+            {% endfor %}
         {% endfor %}
-    </table>
+    </ul>
 
 {% endblock %}

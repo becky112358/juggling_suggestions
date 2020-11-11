@@ -6,9 +6,6 @@ from django.utils.translation import gettext_lazy as _
 from .siteswap import *
 
 
-GOALS_MAX_COLUMNS = 3
-
-
 class Pattern(models.Model):
 
     def __init__(self, *args, **kwargs):
@@ -139,7 +136,6 @@ class Goal(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     pattern = models.ForeignKey(Pattern, on_delete=models.CASCADE)
     row = models.IntegerField(validators=[MinValueValidator(0)])
-    column = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(GOALS_MAX_COLUMNS)])
 
     def __str__(self):
         return str(self.pattern)
