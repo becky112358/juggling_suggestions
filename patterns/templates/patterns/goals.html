@@ -5,6 +5,8 @@
     <ul>
         {% for goal in goal_list %}
             <li><a href="{% url 'patterns:detail' goal.pattern.id %}">{{ goal }}</a></li>
+        {% empty %}
+            You haven't set any goals yet.
         {% endfor %}
     </ul>
 
