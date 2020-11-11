@@ -22,7 +22,6 @@ def index(request):
 
 
 def detail(request, pattern_id):
-    pattern_list = Pattern.objects.all()
     pattern = get_object_or_404(Pattern, pk=pattern_id)
 
     current_user = request.user
@@ -55,13 +54,26 @@ def detail(request, pattern_id):
 
     record_list = user_get_records(current_user).filter(pattern=pattern)
 
+    pattern_list = Pattern.objects.all().order_by('n_objects')
+    similar_patterns_list = []
+    for other_pattern in pattern_list:
+        if other_pattern != pattern and other_pattern.prop_type == pattern.prop_type:
+            if other_pattern.n_objects == pattern.n_objects + 1 \
+                    and other_pattern.max_height_minus_min_height <= pattern.max_height_minus_min_height:
+                similar_patterns_list.append(other_pattern)
+            elif other_pattern.n_objects == pattern.n_objects:
+                similar_patterns_list.append(other_pattern)
+            elif other_pattern.n_objects == pattern.n_objects - 1 \
+                    and other_pattern.max_height_minus_min_height >= pattern.max_height_minus_min_height:
+                similar_patterns_list.append(other_pattern)
+
     return render(request, 'patterns/detail.html',
                   {'pattern': pattern,
-                   'pattern_list': pattern_list,
                    'modifier_list': Modifier,
                    'form': form,
                    'goal_text': goal_text,
-                   'record_list': record_list})
+                   'record_list': record_list,
+                   'similar_patterns_list': similar_patterns_list})
 
 
 # TODO fix this tangle!

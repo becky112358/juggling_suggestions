@@ -58,12 +58,8 @@
     {% endif %}
 
     <h1>Patterns of a similar difficulty</h1>
-    {% for similar_pattern in pattern_list %}
-        {% if similar_pattern.n_objects == pattern.n_objects %}
-            {% if similar_pattern != pattern %}
-            <a href="{% url 'patterns:detail' similar_pattern.id %}">{{ similar_pattern }}</a>
-            <br>
-            {% endif %}
-        {% endif %}
+    {% for similar_pattern in similar_patterns_list %}
+        <a href="{% url 'patterns:detail' similar_pattern.id %}">{{ similar_pattern }}</a>
+        <br>
     {% endfor %}
 {% endblock %}
