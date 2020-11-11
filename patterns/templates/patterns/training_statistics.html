@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <ul>
+        {% for record in record_list %}
+            <li>{{ record }} of {{ record.pattern }}</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

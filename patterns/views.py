@@ -53,9 +53,7 @@ def detail(request, pattern_id):
 
         goal_text = "Add this pattern to my goals"
 
-    record_list = Record.objects.filter(pattern=pattern)\
-        .filter(Q(user1=current_user) | Q(user2=current_user))\
-        .order_by('-date')
+    record_list = user_get_records(current_user).filter(pattern=pattern)
 
     return render(request, 'patterns/detail.html',
                   {'pattern': pattern,
@@ -94,12 +92,25 @@ def log_record(request, pattern_id):
                    'form': form})
 
 
+def training_statistics(request):
+    record_list = user_get_records(request.user)
+    return render(request, 'patterns/training_statistics.html',
+                  {'record_list': record_list})
+
+
 def goals(request):
     goal_list = Goal.objects.filter(user=request.user)
     max_row = goals_max_row(goal_list)
     return render(request, 'patterns/goals.html',
                   {'goal_list': goal_list,
                    'row_list': range(max_row+1)})
+
+
+def user_get_records(user):
+    record_list = Record.objects \
+        .filter(Q(user1=user) | Q(user2=user)) \
+        .order_by('-date')
+    return record_list
 
 
 def goals_max_row(goal_list):
