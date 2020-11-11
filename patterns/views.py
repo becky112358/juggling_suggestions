@@ -54,7 +54,7 @@ def detail(request, pattern_id):
 
     record_list = user_get_records(current_user).filter(pattern=pattern)
 
-    pattern_list = Pattern.objects.all().order_by('n_objects')
+    pattern_list = Pattern.objects.all()
     similar_patterns_list = []
     for other_pattern in pattern_list:
         if other_pattern != pattern and other_pattern.prop_type == pattern.prop_type:
