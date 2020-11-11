@@ -99,11 +99,9 @@ def training_statistics(request):
 
 
 def goals(request):
-    goal_list = Goal.objects.filter(user=request.user)
-    max_row = goals_max_row(goal_list)
+    goal_list = Goal.objects.filter(user=request.user).order_by('row')
     return render(request, 'patterns/goals.html',
-                  {'goal_list': goal_list,
-                   'row_list': range(max_row+1)})
+                  {'goal_list': goal_list})
 
 
 def user_get_records(user):

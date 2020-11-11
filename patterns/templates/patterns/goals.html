@@ -3,12 +3,8 @@
 {% block content %}
 
     <ul>
-        {% for row in row_list %}
-            {% for goal in goal_list %}
-                {% if goal.row == row %}
-                    <li><a href="{% url 'patterns:detail' goal.pattern.id %}">{{ goal }}</a></li>
-                {% endif %}
-            {% endfor %}
+        {% for goal in goal_list %}
+            <li><a href="{% url 'patterns:detail' goal.pattern.id %}">{{ goal }}</a></li>
         {% endfor %}
     </ul>
 
