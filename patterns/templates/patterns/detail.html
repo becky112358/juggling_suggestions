@@ -41,14 +41,10 @@
     </table>
 
     {% if user.is_authenticated %}
-        {% if is_goal %}
-            <h2>Pattern is a goal!</h2>
-        {% else %}
-            <form action="" method="post">
-                {% csrf_token %}
-                <input type="submit" value="Make this pattern a goal">
-            </form>
-        {% endif %}
+        <form action="" method="post">
+            {% csrf_token %}
+            <input type="submit" value="{{ goal_text }}">
+        </form>
     {% endif %}
 
     {% if user.is_authenticated %}

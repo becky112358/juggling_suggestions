@@ -12,7 +12,7 @@
         <a href="{% url 'patterns:index' %}">Overview</a>
         <a href="">Training Plan</a>
         <a href="">Training Statistics</a>
-        <a href="">Goals</a>
+        <a href="{% url 'patterns:goals' %}">Goals</a>
         {% if user.is_authenticated %}
             <a href="{% url 'logout' %}">Log Out</a>
         {% else %}

@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, HttpResponseRedirect, render
 from django.urls import reverse
 
 from .forms import GoalForm, RecordForm, RecordFormTwoJugglers
-from .models import Goal, Modifier, Pattern, Record
+from .models import Goal, GOALS_MAX_COLUMNS, Modifier, Pattern, Record
 
 
 def index(request):
@@ -27,19 +27,31 @@ def detail(request, pattern_id):
 
     current_user = request.user
 
-    if Goal.objects.filter(pattern=pattern).filter(user=current_user):
-        is_goal = True
-    else:
-        is_goal = False
+    goal = Goal.objects.filter(pattern=pattern).filter(user=current_user)
+    if goal:
+        if request.method == 'POST':
+            form = GoalForm(request.POST, instance=goal[0])
+            if form.is_valid():
+                goal.delete()
+                return HttpResponseRedirect(reverse('patterns:detail', args=(pattern.id,)))
+        else:
+            form = GoalForm()
 
-    if request.method == 'POST':
-        goal = Goal(user=current_user, pattern=pattern, row=0)
-        form = GoalForm(request.POST, request.FILES, instance=goal)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('patterns:detail', args=(pattern.id,)))
+        goal_text = "Remove this pattern from my goals"
+
     else:
-        form = GoalForm()
+        if request.method == 'POST':
+            goal_list = Goal.objects.filter(user=request.user)
+            max_row = goals_max_row(goal_list)
+            goal = Goal(user=current_user, pattern=pattern, row=max_row + 1)
+            form = GoalForm(request.POST, request.FILES, instance=goal)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect(reverse('patterns:detail', args=(pattern.id,)))
+        else:
+            form = GoalForm()
+
+        goal_text = "Add this pattern to my goals"
 
     record_list = Record.objects.filter(pattern=pattern)\
         .filter(Q(user1=current_user) | Q(user2=current_user))\
@@ -49,8 +61,8 @@ def detail(request, pattern_id):
                   {'pattern': pattern,
                    'pattern_list': pattern_list,
                    'modifier_list': Modifier,
-                   'is_goal': is_goal,
                    'form': form,
+                   'goal_text': goal_text,
                    'record_list': record_list})
 
 
@@ -80,3 +92,19 @@ def log_record(request, pattern_id):
     return render(request, 'patterns/log_record.html',
                   {'pattern': pattern,
                    'form': form})
+
+
+def goals(request):
+    goal_list = Goal.objects.filter(user=request.user)
+    max_row = goals_max_row(goal_list)
+    return render(request, 'patterns/goals.html',
+                  {'goal_list': goal_list,
+                   'row_list': range(max_row+1),
+                   'column_list': range(GOALS_MAX_COLUMNS+1)})
+
+
+def goals_max_row(goal_list):
+    max_row = 0
+    for goal in goal_list:
+        max_row = max(max_row, goal.row)
+    return max_row
