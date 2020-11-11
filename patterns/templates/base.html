@@ -10,7 +10,7 @@
     <div class="sidebar">
     {% block sidebar %}
         <a href="{% url 'patterns:index' %}">Overview</a>
-        <a href="">Training Plan</a>
+        <a href="{% url 'patterns:training_plan' %}">Training Plan</a>
         <a href="{% url 'patterns:training_statistics' %}">Training Statistics</a>
         <a href="{% url 'patterns:goals' %}">Goals</a>
         {% if user.is_authenticated %}

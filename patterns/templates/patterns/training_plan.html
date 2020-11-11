@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <ul>
+        <li>Five minutes: warm-up</li>
+        <h3>--- 5 minutes ---</h3>
+        {% for goal in goal_list %}
+            <li>Three minutes: warm-up one for {{ goal }}</li>
+            <li>Three minutes: warm-up two for {{ goal }}</li>
+            <li>Three minutes: warm-up three for {{ goal }}</li>
+            <li>Six minutes: work on {{ goal }}</li>
+            <h3>--- 15 minutes ---</h3>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

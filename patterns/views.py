@@ -92,6 +92,12 @@ def log_record(request, pattern_id):
                    'form': form})
 
 
+def training_plan(request):
+    goal_list = Goal.objects.filter(user=request.user).order_by('row')
+    return render(request, 'patterns/training_plan.html',
+                  {'goal_list': goal_list})
+
+
 def training_statistics(request):
     record_list = user_get_records(request.user)
     return render(request, 'patterns/training_statistics.html',
