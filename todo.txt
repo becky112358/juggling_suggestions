@@ -1,0 +1,20 @@
+***tests***
+
+sidebar collapses to three horizontal lines
+
+topbar(?): prop, number of jugglers -> select jugglers
+
+Overview: table according to difficulty
+
+Training plan:
+Suggest specific stuff
+Timing
+
+Goal data and Training data are separate
+
+Goal data should include partners
+
+Make record model and record form extentable for indefinite number of jugglers
+
+Inputting a new siteswap: Does not accept (6x,4x)
+
